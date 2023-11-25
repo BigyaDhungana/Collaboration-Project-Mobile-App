@@ -8,13 +8,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Projectdash = () => {
   const pId = useLocalSearchParams().projectId;
-
+  // console.log(route)
   return (
-    <SafeAreaProvider>
+    <>
       <View style={styles.containers}>
         <Text>Projectdash</Text>
         {/* <Taskcard /> */}
-        <Collapsible title="Todos">
+       <Collapsible title="Todos">
           <MaterialCommunityIcons
             name="progress-close"
             size={40}
@@ -36,7 +36,10 @@ const Projectdash = () => {
           />
         </Collapsible>
       </View>
-    </SafeAreaProvider>
+      {/* <View style={styles.container}>
+        <Text>{pId}</Text>
+      </View> */}
+    </>
   );
 };
 

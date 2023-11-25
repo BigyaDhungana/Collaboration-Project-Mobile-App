@@ -10,7 +10,6 @@ import {
   Collapse,
   CollapseHeader,
   CollapseBody,
-  AccordionList,
 } from "accordion-collapse-react-native";
 import Taskcard from "./taskcard";
 
@@ -64,7 +63,8 @@ const styles = StyleSheet.create({
   },
   body: {
     width: "80%",
-    zIndex:1},
+    zIndex: 1,
+  },
   icon: {
     position: "relative",
     bottom: 25,

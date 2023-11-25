@@ -31,7 +31,7 @@ export default function Page() {
 
   const fingerPrintLogin = () => {
     console.log("Finger print login");
-    router.push("/dashboard/21");
+    router.push("/dashboard/layout");
   };
 
   return (
