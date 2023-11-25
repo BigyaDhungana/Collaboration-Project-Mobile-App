@@ -5,6 +5,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Projectdash from "./[projectId]";
 import logo from "../../assets/img/logos.png";
 import Profile from "../../components/profile";
+import Allproject from "./allproject";
 
 const projdummy = [
   { id: 1, name: "Project 1" },
@@ -33,6 +34,7 @@ const Layout = () => {
           },
         }}
       >
+        <Drawer.Screen name="All Projects" component={Allproject} />
         {projdummy.map((element) => {
           return (
             <Drawer.Screen

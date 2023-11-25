@@ -49,7 +49,7 @@ export default Collapsible;
 
 const styles = StyleSheet.create({
   header: {
-    width: "80%",
+    width: "90%",
     borderWidth: 1,
     borderColor: "black",
     height: 100,
@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    marginBottom: 10,
+    marginTop: 10,
   },
   headerText: {
     fontSize: 50,
@@ -64,10 +66,12 @@ const styles = StyleSheet.create({
   body: {
     width: "80%",
     zIndex: 1,
+    marginBottom: 10,
+    marginLeft: 13,
   },
   icon: {
     position: "relative",
-    bottom: 25,
-    left: 290,
+    bottom: 35,
+    left: 299,
   },
 });

@@ -175,4 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "bold",
   },
+  modal:{
+    width: "110%",
+  }
 });
