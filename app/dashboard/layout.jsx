@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 3,
     marginRight: 13,
-    zIndex:10,
+    zIndex: 10,
   },
 });

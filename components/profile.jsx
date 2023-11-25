@@ -1,4 +1,10 @@
-import { View, StyleSheet, Image, Pressable } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import {
   HStack,
@@ -17,6 +23,11 @@ import {
   Button,
   ButtonText,
   Text,
+  Actionsheet,
+  ActionsheetContent,
+  ActionsheetItem,
+  ActionsheetItemText,
+  Divider,
 } from "@gluestack-ui/themed";
 import {
   Collapse,
@@ -29,6 +40,7 @@ import userImage from "../assets/img/logoa.png";
 const Profile = () => {
   const [showYourInfo, setShowYourInfo] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const [showActionsheet, setShowActionsheet] = useState(false);
 
   const handleLogout = () => {
     console.log("logout");
@@ -36,10 +48,16 @@ const Profile = () => {
 
   return (
     <GluestackUIProvider config={config}>
-      <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-        <AvatarFallbackText>Hello World</AvatarFallbackText>
-        <AvatarBadge />
-      </Avatar>
+      <TouchableOpacity
+        onPress={() => {
+          setShowActionsheet(!showActionsheet);
+        }}
+      >
+        <Avatar bgColor="$amber600" size="md" borderRadius="$full">
+          <AvatarFallbackText>Hello World</AvatarFallbackText>
+          <AvatarBadge />
+        </Avatar>
+      </TouchableOpacity>
 
       {/* Your Info */}
       <Modal
@@ -114,6 +132,28 @@ const Profile = () => {
           </Center>
         </ModalContent>
       </Modal>
+
+      <Actionsheet isOpen={showActionsheet} style={styles.actionsheet}>
+        <ActionsheetContent style={styles.actionsheetContent}>
+          <ActionsheetItem
+            onPress={() => {
+              setShowYourInfo(!showYourInfo);
+              setShowActionsheet(false);
+            }}
+          >
+            <ActionsheetItemText>Your Information</ActionsheetItemText>
+          </ActionsheetItem>
+          <Divider />
+          <ActionsheetItem
+            onPress={() => {
+              setShowLogoutConfirmation(!showLogoutConfirmation);
+              setShowActionsheet(false);
+            }}
+          >
+            <ActionsheetItemText>Logout</ActionsheetItemText>
+          </ActionsheetItem>
+        </ActionsheetContent>
+      </Actionsheet>
     </GluestackUIProvider>
   );
 };
@@ -137,7 +177,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  test: {
+  actionsheet: {
+    position: "absolute",
     zIndex: 1000,
+    top: -40,
+    height: 200,
+    width: 200,
+    left: 200,
+  },
+  actionsheetContent: {
+    backgroundColor: "#FCFBFC",
   },
 });
