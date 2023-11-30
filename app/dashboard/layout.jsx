@@ -1,11 +1,12 @@
 import "react-native-gesture-handler";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, StatusBar } from "react-native";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Projectdash from "./[projectId]";
 import logo from "../../assets/img/logos.png";
 import Profile from "../../components/profile";
 import Allproject from "./allproject";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const projdummy = [
   { id: 1, name: "Project 1" },
@@ -67,5 +68,6 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     marginRight: 13,
     zIndex: 10,
+    marginTop: StatusBar.currentHeight,
   },
 });

@@ -17,16 +17,31 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
 import logo from "../assets/img/logoa.png";
 import { useRouter } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "../apiFunc/users";
+import Toast from "react-native-toast-message";
 
 export default function Page() {
   const router = useRouter();
   const [showFp, setFp] = useState(false);
   const [buttonClass, setButtonClass] = useState(styles.loginButton);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const loginResponse = useMutation({
+    mutationFn: (data) => loginApi(data),
+    onError: (error) => {
+      Toast.show({type:"error" ,text1:error.message,text2:"Please try again"})
+     
+    },
+    onSuccess: (data) => {
+      console.log(data)
+      router.push("/dashboard/layout");
+    },
+  });
 
   const handleLogin = () => {
-    console.log("Jethalal champak gada");
-    setFp(true);
-    setButtonClass(styles.loginButtonIfFp);
+    loginResponse.mutate({ username: username, password: password });
   };
 
   const fingerPrintLogin = () => {
@@ -47,13 +62,13 @@ export default function Page() {
             <View style={styles.infoItem}>
               <Text>Username</Text>
               <Input size="sm">
-                <InputField />
+                <InputField onChangeText={(e) => setUsername(e)} />
               </Input>
             </View>
             <View style={styles.infoItem}>
               <Text>Password</Text>
               <Input>
-                <InputField />
+                <InputField onChangeText={(e) => setPassword(e)} />
               </Input>
             </View>
             <View style={styles.buttonGroup}>
