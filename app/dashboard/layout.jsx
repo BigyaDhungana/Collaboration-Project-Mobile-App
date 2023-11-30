@@ -1,12 +1,13 @@
 import "react-native-gesture-handler";
 import { View, Text, Image, StyleSheet, StatusBar } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Projectdash from "./[projectId]";
 import logo from "../../assets/img/logos.png";
 import Profile from "../../components/profile";
 import Allproject from "./allproject";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { getData } from "../../utils/getData";
 
 const projdummy = [
   { id: 1, name: "Project 1" },
@@ -16,6 +17,14 @@ const projdummy = [
 
 const Layout = () => {
   const Drawer = createDrawerNavigator();
+
+  // useEffect(() => {
+  //   (async () => {
+  //     data=await getData("authToken");
+  //     console.log(data)
+  //   })();
+  // }, []);
+
   return (
     <>
       <View style={styles.container}>

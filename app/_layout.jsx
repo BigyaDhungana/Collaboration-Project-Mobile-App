@@ -9,6 +9,7 @@ import {
   QueryClientProvider,
   useQueryClient,
 } from "@tanstack/react-query";
+import { getData } from "../utils/getData";
 
 const Layout = () => {
   const queryClient = new QueryClient();

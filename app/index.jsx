@@ -20,6 +20,7 @@ import { useRouter } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "../apiFunc/users";
 import Toast from "react-native-toast-message";
+import {storedata} from "../utils/storeData"
 
 export default function Page() {
   const router = useRouter();
@@ -35,13 +36,16 @@ export default function Page() {
      
     },
     onSuccess: (data) => {
-      console.log(data)
+      console.log(data.data.token)
+      storedata("authToken", data.data.token);
       router.push("/dashboard/layout");
     },
   });
 
   const handleLogin = () => {
-    loginResponse.mutate({ username: username, password: password });
+    // loginResponse.mutate({ username: username, password: password });
+    storedata("authToken","testforhehe")
+    router.push("/dashboard/layout")
   };
 
   const fingerPrintLogin = () => {
