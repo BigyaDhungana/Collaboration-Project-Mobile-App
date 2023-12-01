@@ -46,10 +46,6 @@ const Profile = ({ userDetails }) => {
     console.log("logout");
   };
 
-  console.log(
-    `${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`
-  );
-
   return (
     <GluestackUIProvider config={config}>
       <TouchableOpacity
@@ -91,7 +87,9 @@ const Profile = ({ userDetails }) => {
                 <Text>Id :{userDetails.userID}</Text>
               </View>
               <Image
-                source={{uri:`${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`}}
+                source={{
+                  uri: `${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`,
+                }}
                 style={styles.userImage}
               />
             </View>
