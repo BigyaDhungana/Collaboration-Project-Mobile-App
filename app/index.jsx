@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ActivityIndicator } from "react-native";
 
 import {
   Button,
@@ -20,7 +20,7 @@ import { useRouter } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "../apiFunc/users";
 import Toast from "react-native-toast-message";
-import {storedata} from "../utils/storeData"
+import { storedata } from "../utils/storeData";
 
 export default function Page() {
   const router = useRouter();
@@ -32,20 +32,38 @@ export default function Page() {
   const loginResponse = useMutation({
     mutationFn: (data) => loginApi(data),
     onError: (error) => {
-      Toast.show({type:"error" ,text1:error.message,text2:"Please try again"})
-     
+      Toast.show({
+        type: "error",
+        text1: error.message,
+        text2: "Please try again",
+      });
     },
     onSuccess: (data) => {
-      console.log(data.data.token)
-      storedata("authToken", data.data.token);
+      const {
+        username: uname,
+        token,
+        profile_picture,
+        userID,
+        name,
+        email,
+      } = data.data;
+      storedata("authToken", token);
+      storedata("userDetails", { uname, profile_picture, userID, name, email });
+      Toast.show({
+        type: "success",
+        text1: "Welcome",
+        text2: uname,
+      });
       router.push("/dashboard/layout");
     },
   });
 
   const handleLogin = () => {
-    // loginResponse.mutate({ username: username, password: password });
-    storedata("authToken","testforhehe")
-    router.push("/dashboard/layout")
+    loginResponse.mutate({ username: username, password: password });
+    setUsername("");
+    setPassword("");
+    // storedata("authToken", "testforhehe");
+    // router.push("/dashboard/layout");
   };
 
   const fingerPrintLogin = () => {
@@ -66,18 +84,35 @@ export default function Page() {
             <View style={styles.infoItem}>
               <Text>Username</Text>
               <Input size="sm">
-                <InputField onChangeText={(e) => setUsername(e)} />
+                <InputField
+                  onChangeText={(e) => setUsername(e)}
+                  value={username}
+                />
               </Input>
             </View>
             <View style={styles.infoItem}>
               <Text>Password</Text>
               <Input>
-                <InputField onChangeText={(e) => setPassword(e)} />
+                <InputField
+                  onChangeText={(e) => setPassword(e)}
+                  value={password}
+                  type="password"
+                />
               </Input>
             </View>
             <View style={styles.buttonGroup}>
-              <Button onPress={handleLogin} style={buttonClass}>
-                <ButtonText>Login</ButtonText>
+              <Button
+                onPress={handleLogin}
+                style={buttonClass}
+                disabled={loginResponse.isPending}
+              >
+                <ButtonText>
+                  {loginResponse.isPending ? (
+                    <ActivityIndicator size="small" color="#FFFFFF" />
+                  ) : (
+                    <>Login</>
+                  )}
+                </ButtonText>
               </Button>
               {showFp ? (
                 <Button

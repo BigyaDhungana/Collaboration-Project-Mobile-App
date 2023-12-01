@@ -37,7 +37,7 @@ import {
 import { config } from "../config/gluestack-ui.config";
 import userImage from "../assets/img/logoa.png";
 
-const Profile = () => {
+const Profile = ({ userDetails }) => {
   const [showYourInfo, setShowYourInfo] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [showActionsheet, setShowActionsheet] = useState(false);
@@ -45,6 +45,10 @@ const Profile = () => {
   const handleLogout = () => {
     console.log("logout");
   };
+
+  console.log(
+    `${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`
+  );
 
   return (
     <GluestackUIProvider config={config}>
@@ -56,6 +60,12 @@ const Profile = () => {
         <Avatar bgColor="$amber600" size="md" borderRadius="$full">
           <AvatarFallbackText>Hello World</AvatarFallbackText>
           <AvatarBadge />
+          <AvatarImage
+            source={{
+              uri: `${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`,
+            }}
+            alt="profile_pic"
+          />
         </Avatar>
       </TouchableOpacity>
 
@@ -75,12 +85,15 @@ const Profile = () => {
           <ModalBody>
             <View style={styles.container}>
               <View>
-                <Text>Name :</Text>
-                <Text>Email :</Text>
-                <Text>Username :</Text>
-                <Text>Id :</Text>
+                <Text>Name :{userDetails.name}</Text>
+                <Text>Email :{userDetails.email}</Text>
+                <Text>Username {userDetails.uname}:</Text>
+                <Text>Id :{userDetails.userID}</Text>
               </View>
-              <Image source={userImage} style={styles.userImage} />
+              <Image
+                source={{uri:`${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`}}
+                style={styles.userImage}
+              />
             </View>
           </ModalBody>
           <Center>

@@ -8,6 +8,7 @@ import Profile from "../../components/profile";
 import Allproject from "./allproject";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { getData } from "../../utils/getData";
+import { useGetData } from "../../hooks/useGetData";
 
 const projdummy = [
   { id: 1, name: "Project 1" },
@@ -24,12 +25,17 @@ const Layout = () => {
   //     console.log(data)
   //   })();
   // }, []);
+  const { authToken, userDetails } = useGetData();
+  // console.log(authToken);
+  // console.log(userDetails)
+
+  if (!authToken) return;
 
   return (
     <>
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
-        <Profile />
+        <Profile userDetails={userDetails} />
       </View>
       <Drawer.Navigator
         screenOptions={{
