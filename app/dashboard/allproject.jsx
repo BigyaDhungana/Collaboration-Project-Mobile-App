@@ -32,7 +32,6 @@ const Allproject = () => {
           <Projectcard announcementObj={announcement} key={announcement.id} />
         );
       })}
-      
     </ScrollView>
   );
 };

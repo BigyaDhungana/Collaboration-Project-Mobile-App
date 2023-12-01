@@ -10,7 +10,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { getData } from "../../utils/getData";
 import { useGetData } from "../../hooks/useGetData";
 import { useQuery } from "@tanstack/react-query";
-import { dashboardApi } from "../../apiFunc/dashboard";
+import { metadataApi } from "../../apiFunc/users";
+import { storedata } from "../../utils/storeData";
 
 const projdummy = [
   { id: 1, name: "Project 1" },
@@ -22,21 +23,18 @@ const Layout = () => {
   const Drawer = createDrawerNavigator();
   const { authToken, userDetails } = useGetData();
 
-  const getDashboardResponse = useQuery({
-    queryKey: ["dashboard"],
-    queryFn: () => dashboardApi(authToken),
+  const metadataResponse = useQuery({
+    queryKey: ["metadata"],
+    queryFn: () => metadataApi(authToken),
     enabled: !!authToken,
   });
 
-  // useEffect(() => {
-  //   if (getDashboardResponse.data) {
-  //     console.log(getDashboardResponse.data);
-  //   }
-  // }, [getDashboardResponse.data]);
-  // console.log(getDashboardResponse,"hehe");
+  if (metadataResponse.isSuccess) {
+    storedata("metadata", metadataResponse.data);
+  }
 
   if (!authToken) return;
-  // if (getDashboardResponse.data == null) return;
+  if (metadataResponse.data == null) return;
 
   return (
     <>
@@ -58,13 +56,13 @@ const Layout = () => {
         }}
       >
         <Drawer.Screen name="Announcements" component={Allproject} />
-        {projdummy.map((element) => {
+        {metadataResponse.data.map((projObj) => {
           return (
             <Drawer.Screen
-              name={element.name}
+              name={projObj.project_name}
               component={Projectdash}
-              key={element.id}
-              initialParams={{ projectId: element.id }}
+              key={projObj.project_id}
+              initialParams={{ projectId: projObj.project_id }}
             />
           );
         })}

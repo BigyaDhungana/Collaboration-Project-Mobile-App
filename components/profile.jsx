@@ -36,14 +36,31 @@ import {
 } from "accordion-collapse-react-native";
 import { config } from "../config/gluestack-ui.config";
 import userImage from "../assets/img/logoa.png";
+import { useMutation } from "@tanstack/react-query";
+import { useGetData } from "../hooks/useGetData";
+import { logoutApi } from "../apiFunc/users";
+import Toast from "react-native-toast-message";
+import { useRouter } from "expo-router";
 
 const Profile = ({ userDetails }) => {
+  const router = useRouter();
   const [showYourInfo, setShowYourInfo] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [showActionsheet, setShowActionsheet] = useState(false);
+  const { authToken } = useGetData();
+  const logoutResponse = useMutation({
+    mutationFn: () => logoutApi(authToken),
+    onSuccess: () => {
+      Toast.show({ type: "success", text1: "Logged out successfully" });
+      router.replace("/");
+    },
+    onError: (error) => {
+      Toast.show({ type: "error", text1: error.message });
+    },
+  });
 
   const handleLogout = () => {
-    console.log("logout");
+    logoutResponse.mutate();
   };
 
   return (
@@ -54,14 +71,15 @@ const Profile = ({ userDetails }) => {
         }}
       >
         <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-          <AvatarFallbackText>Hello World</AvatarFallbackText>
-          <AvatarBadge />
+          <AvatarFallbackText>{userDetails.name}</AvatarFallbackText>
+
           <AvatarImage
             source={{
               uri: `${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`,
             }}
             alt="profile_pic"
           />
+          <AvatarBadge />
         </Avatar>
       </TouchableOpacity>
 

@@ -54,7 +54,7 @@ export default function Page() {
         text1: "Welcome",
         text2: uname,
       });
-      router.push("/dashboard/layout");
+      router.replace("/dashboard/layout");
     },
   });
 
