@@ -13,8 +13,9 @@ import {
 } from "accordion-collapse-react-native";
 import Taskcard from "./taskcard";
 
-const Collapsible = ({ children, title }) => {
+const Collapsible = ({ children, title, list, refetch, update, setUpdate }) => {
   const [iconName, setIconName] = useState("expand-alt");
+
   return (
     <Collapse
       onToggle={() => {
@@ -34,11 +35,18 @@ const Collapsible = ({ children, title }) => {
       </CollapseHeader>
       <CollapseBody>
         <View style={styles.body}>
-          <Taskcard />
-          <Taskcard />
-          <Taskcard />
-          <Taskcard />
-          <Taskcard />
+          {list.map((element) => {
+            return (
+              <Taskcard
+                key={element.id}
+                task={element}
+                taskTitle={title}
+                refetch={refetch}
+                update={update}
+                setUpdate={setUpdate}
+              />
+            );
+          })}
         </View>
       </CollapseBody>
     </Collapse>

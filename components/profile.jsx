@@ -29,18 +29,13 @@ import {
   ActionsheetItemText,
   Divider,
 } from "@gluestack-ui/themed";
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from "accordion-collapse-react-native";
 import { config } from "../config/gluestack-ui.config";
-import userImage from "../assets/img/logoa.png";
 import { useMutation } from "@tanstack/react-query";
 import { useGetData } from "../hooks/useGetData";
 import { logoutApi } from "../apiFunc/users";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = ({ userDetails }) => {
   const router = useRouter();
@@ -53,6 +48,9 @@ const Profile = ({ userDetails }) => {
     onSuccess: () => {
       Toast.show({ type: "success", text1: "Logged out successfully" });
       router.replace("/");
+      AsyncStorage.removeItem("authToken");
+      AsyncStorage.removeItem("userDetails");
+      AsyncStorage.removeItem("metadata");
     },
     onError: (error) => {
       Toast.show({ type: "error", text1: error.message });

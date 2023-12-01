@@ -30,8 +30,6 @@ export const deleteTodoApi = async (token, data) => {
 };
 
 export const updataTodoApi = async (token, data) => {
-  //data={todo:teamid,status:0,1,2}
-  console.log(token, data);
   const response = await axios.patch(url, data, {
     headers: { Authorization: `Token ${token}` },
   });

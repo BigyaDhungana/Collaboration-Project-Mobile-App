@@ -16,9 +16,6 @@ const Allproject = () => {
     enabled: !!authToken,
   });
   if (getDashboardResponse.data == null) return;
-  console.log(getDashboardResponse.data);
-
-  console.log(getDashboardResponse.data.announcement);
 
   return (
     <ScrollView

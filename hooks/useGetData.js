@@ -5,6 +5,7 @@ export const useGetData = () => {
   const [authToken, setAuthToken] = useState("");
   const [userDetails, setUserDetails] = useState("");
   const [metadata, setMetadata] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     (async () => {
       const token = await getData("authToken");
@@ -13,7 +14,8 @@ export const useGetData = () => {
       setUserDetails(JSON.parse(userdetail));
       const metaData = await getData("metadata");
       setMetadata(JSON.parse(metaData) || JSON.parse({ moye: "moye" }));
+      setIsMounted(true);
     })();
   }, []);
-  return { authToken, userDetails, metadata };
+  return { authToken, userDetails, metadata, isMounted };
 };
