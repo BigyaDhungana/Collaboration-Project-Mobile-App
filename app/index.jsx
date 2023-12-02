@@ -10,17 +10,18 @@ import {
   InputField,
   KeyboardAvoidingView,
   Center,
-  set,
 } from "@gluestack-ui/themed";
 import { config } from "../config/gluestack-ui.config";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/img/logoa.png";
 import { useRouter } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "../apiFunc/users";
 import Toast from "react-native-toast-message";
 import { storedata } from "../utils/storeData";
+import * as localAuth from "expo-local-authentication";
+import { getData } from "../utils/getData";
 
 export default function Page() {
   const router = useRouter();
@@ -28,6 +29,49 @@ export default function Page() {
   const [buttonClass, setButtonClass] = useState(styles.loginButton);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [hasHardware, setHasHardware] = useState(false);
+  const [fpScannerAvailable, setFpScannerAvailable] = useState(false);
+  const [hasSavedFp, setHasSavedFp] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const hasHardwareAuth = await localAuth.hasHardwareAsync();
+      setHasHardware(hasHardwareAuth);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (hasHardware) {
+      (async () => {
+        const authtype = await localAuth.supportedAuthenticationTypesAsync();
+        if (authtype.includes(1)) {
+          setFpScannerAvailable(true);
+        }
+      })();
+    }
+  }, [hasHardware]);
+
+  useEffect(() => {
+    if (fpScannerAvailable) {
+      (async () => {
+        const hasSavedFps = await localAuth.isEnrolledAsync();
+        setHasSavedFp(hasSavedFps);
+      })();
+    }
+  }, [fpScannerAvailable]);
+
+  useEffect(() => {
+    if (hasSavedFp) {
+      (async () => {
+        const savedAuthToken = await getData("authToken");
+        console.log(savedAuthToken, "heh");
+        if (savedAuthToken != null && hasSavedFp == true) {
+          setFp("true");
+          setButtonClass(styles.loginButtonIfFp);
+        }
+      })();
+    }
+  }, [hasSavedFp]);
 
   const loginResponse = useMutation({
     mutationFn: (data) => loginApi(data),
@@ -66,9 +110,16 @@ export default function Page() {
     // router.push("/dashboard/layout");
   };
 
-  const fingerPrintLogin = () => {
-    console.log("Finger print login");
-    router.push("/dashboard/layout");
+  const fingerPrintLogin = async () => {
+    const result = await localAuth.authenticateAsync();
+    console.log(result);
+    if (result.success == true) {
+      Toast.show({
+        type: "success",
+        text1: "Welcome Back",
+      });
+      router.replace("/dashboard/layout");
+    }
   };
 
   return (
