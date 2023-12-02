@@ -64,7 +64,6 @@ export default function Page() {
     if (hasSavedFp) {
       (async () => {
         const savedAuthToken = await getData("authToken");
-        console.log(savedAuthToken, "heh");
         if (savedAuthToken != null && hasSavedFp == true) {
           setFp("true");
           setButtonClass(styles.loginButtonIfFp);
@@ -112,7 +111,7 @@ export default function Page() {
 
   const fingerPrintLogin = async () => {
     const result = await localAuth.authenticateAsync();
-    console.log(result);
+    // console.log(result);
     if (result.success == true) {
       Toast.show({
         type: "success",

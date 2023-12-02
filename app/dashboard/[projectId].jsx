@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Taskcard from "../../components/taskcard";
 import Collapsible from "../../components/collapsible";
@@ -10,8 +10,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useGetData } from "../../hooks/useGetData";
 import { useQuery } from "@tanstack/react-query";
 import { getTodoListApi } from "../../apiFunc/todos";
+import Loading from "../../components/loading";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Projectdash = () => {
+  const router = useRouter();
+
   const pId = useLocalSearchParams().projectId;
   const { metadata, isMounted, authToken } = useGetData();
   const [teams, setTeams] = useState([]);
@@ -55,6 +60,26 @@ const Projectdash = () => {
       );
     }
   }, [getTodoResponse.data]);
+
+  if (getTodoResponse.isLoading) {
+    return <Loading />;
+  }
+
+  if (getTodoResponse.isError) {
+    if (getTodoResponse.error.message == "401") {
+      Toast.show({
+        type: "error",
+        text1: "Session expired, please login again",
+      });
+      AsyncStorage.removeItem("authToken");
+      router.replace("/");
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong, please try again",
+      });
+    }
+  }
 
   if (!isMounted) return;
 

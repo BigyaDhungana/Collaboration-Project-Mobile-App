@@ -1,25 +1,31 @@
 import "react-native-gesture-handler";
-import { View, Text, Image, StyleSheet, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  StatusBar,
+  Platform,
+} from "react-native";
 import React, { useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Projectdash from "./[projectId]";
 import logo from "../../assets/img/logos.png";
 import Profile from "../../components/profile";
 import Allproject from "./allproject";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { getData } from "../../utils/getData";
 import { useGetData } from "../../hooks/useGetData";
 import { useQuery } from "@tanstack/react-query";
 import { metadataApi } from "../../apiFunc/users";
 import { storedata } from "../../utils/storeData";
-
-const projdummy = [
-  { id: 1, name: "Project 1" },
-  { id: 2, name: "Project 2" },
-  { id: 3, name: "Project 3" },
-];
+import { LoaderIcon } from "@gluestack-ui/themed";
+import Loading from "../../components/loading";
+import Toast from "react-native-toast-message";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Layout = () => {
+  const router = useRouter();
+
   const Drawer = createDrawerNavigator();
   const { authToken, userDetails } = useGetData();
 
@@ -31,6 +37,22 @@ const Layout = () => {
 
   if (metadataResponse.isSuccess) {
     storedata("metadata", metadataResponse.data);
+  }
+
+  if (metadataResponse.isError) {
+    console.log(metadataResponse.error.message);
+    if (metadataResponse.error.message == "401") {
+      Toast.show({
+        type: "error",
+        text1: "Session expired, please login again"
+      });
+      AsyncStorage.removeItem("authToken");
+      router.replace("/");
+    }
+  }
+
+  if (metadataResponse.isLoading) {
+    return <Loading />;
   }
 
   if (!authToken) return;
@@ -88,6 +110,6 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     marginRight: 13,
     zIndex: 10,
-    marginTop: StatusBar.currentHeight,
+    marginTop: Platform.OS == "ios" ? 30 : StatusBar.currentHeight,
   },
 });
