@@ -12,7 +12,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Projectdash from "./[projectId]";
 import logo from "../../assets/img/logos.png";
 import Profile from "../../components/profile";
-import Allproject from "./allproject";
+import Announcement from "./allproject";
 import { useGetData } from "../../hooks/useGetData";
 import { useQuery } from "@tanstack/react-query";
 import { metadataApi } from "../../apiFunc/users";
@@ -44,7 +44,7 @@ const Layout = () => {
     if (metadataResponse.error.message == "401") {
       Toast.show({
         type: "error",
-        text1: "Session expired, please login again"
+        text1: "Session expired, please login again",
       });
       AsyncStorage.removeItem("authToken");
       router.replace("/");
@@ -71,13 +71,13 @@ const Layout = () => {
           headerTitleContainerStyle: {
             display: "flex",
           },
-          headerStatusBarHeight: 0,
+          headerStatusBarHeight: 5,
           drawerStyle: {
             zIndex: 1,
           },
         }}
       >
-        <Drawer.Screen name="Announcements" component={Allproject} />
+        <Drawer.Screen name="Announcements" component={Announcement} />
         {metadataResponse.data.map((projObj) => {
           return (
             <Drawer.Screen

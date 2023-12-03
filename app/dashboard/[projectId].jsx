@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Taskcard from "../../components/taskcard";
 import Collapsible from "../../components/collapsible";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import RNPickerSelect from "react-native-picker-select";
 import { ScrollView } from "react-native-gesture-handler";
 import { useGetData } from "../../hooks/useGetData";
@@ -13,18 +13,21 @@ import { getTodoListApi } from "../../apiFunc/todos";
 import Loading from "../../components/loading";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GluestackUIProvider, Switch } from "@gluestack-ui/themed";
+import { config } from "../../config/gluestack-ui.config";
 
 const Projectdash = () => {
   const router = useRouter();
 
   const pId = useLocalSearchParams().projectId;
-  const { metadata, isMounted, authToken } = useGetData();
+  const { metadata, isMounted, authToken, userDetails } = useGetData();
   const [teams, setTeams] = useState([]);
   const [selectedTeamId, setSelectedTeamId] = useState(teams[0]?.value);
   const [todo, setTodo] = useState([]);
   const [inProgress, setInProgress] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [update, setUpdate] = useState(false);
+  const [isUserOnly, setIsUserOnly] = useState(false);
 
   const getTodoResponse = useQuery({
     queryKey: ["todos", selectedTeamId, update],
@@ -48,18 +51,41 @@ const Projectdash = () => {
   }, [isMounted]);
 
   useEffect(() => {
-    if (getTodoResponse.data != null) {
+    if (getTodoResponse.data != null && isUserOnly === false) {
       setTodo(
-        getTodoResponse.data.filter((listObj) => listObj.status == "TODO")
+        getTodoResponse.data.filter((listObj) => listObj.status === "TODO")
       );
       setInProgress(
-        getTodoResponse.data.filter((listObj) => listObj.status == "PROGRESS")
+        getTodoResponse.data.filter((listObj) => listObj.status === "PROGRESS")
       );
       setCompleted(
-        getTodoResponse.data.filter((listObj) => listObj.status == "COMPLETE")
+        getTodoResponse.data.filter((listObj) => listObj.status === "COMPLETE")
       );
     }
-  }, [getTodoResponse.data]);
+    if (getTodoResponse.data != null && isUserOnly === true) {
+      setTodo(
+        getTodoResponse.data.filter(
+          (listObj) =>
+            listObj.status === "TODO" &&
+            listObj.assigned_to == userDetails.uname
+        )
+      );
+      setInProgress(
+        getTodoResponse.data.filter(
+          (listObj) =>
+            listObj.status === "PROGRESS" &&
+            listObj.assigned_to == userDetails.uname
+        )
+      );
+      setCompleted(
+        getTodoResponse.data.filter(
+          (listObj) =>
+            listObj.status === "COMPLETE" &&
+            listObj.assigned_to == userDetails.uname
+        )
+      );
+    }
+  }, [getTodoResponse.data, isUserOnly]);
 
   if (getTodoResponse.isLoading) {
     return <Loading />;
@@ -84,7 +110,7 @@ const Projectdash = () => {
   if (!isMounted) return;
 
   return (
-    <>
+    <GluestackUIProvider config={config}>
       <View style={styles.select}>
         <RNPickerSelect
           onValueChange={(value) => {
@@ -94,6 +120,17 @@ const Projectdash = () => {
           value={selectedTeamId}
           placeholder={{}}
         />
+      </View>
+      <View style={styles.switch}>
+        <FontAwesome name="users" size={25} color="black" />
+        <Switch
+          size="md"
+          value={isUserOnly}
+          onToggle={() => {
+            setIsUserOnly(!isUserOnly);
+          }}
+        />
+        <FontAwesome name="user" size={25} color="black" />
       </View>
       <ScrollView style={styles.container}>
         <Collapsible
@@ -136,10 +173,7 @@ const Projectdash = () => {
           />
         </Collapsible>
       </ScrollView>
-      {/* <View style={styles.container}>
-        <Text>{pId}</Text>
-      </View> */}
-    </>
+    </GluestackUIProvider>
   );
 };
 
@@ -157,5 +191,10 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginLeft: "auto",
     marginTop: 20,
+  },
+  switch: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
 });

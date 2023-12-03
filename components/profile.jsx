@@ -160,7 +160,13 @@ const Profile = ({ userDetails }) => {
         </ModalContent>
       </Modal>
 
-      <Actionsheet isOpen={showActionsheet} style={styles.actionsheet}>
+      <Actionsheet
+        isOpen={showActionsheet}
+        style={styles.actionsheet}
+        onClose={() => {
+          setShowActionsheet(false);
+        }}
+      >
         <ActionsheetContent style={styles.actionsheetContent}>
           <ActionsheetItem
             onPress={() => {

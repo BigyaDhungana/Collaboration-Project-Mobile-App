@@ -66,6 +66,7 @@ const Taskcard = ({ task, taskTitle, refetch, update, setUpdate }) => {
       >
         <View style={styles.taskContainer}>
           <Text style={styles.taskText}>{task.title} </Text>
+          <Text style={styles.assigned_to}>{task?.assigned_to}</Text>
         </View>
       </TouchableHighlight>
       <Modal
@@ -218,4 +219,7 @@ const styles = StyleSheet.create({
   MEDIUM: {
     backgroundColor: "#F8E473",
   },
+  assigned_to:{
+    fontSize:10
+  }
 });

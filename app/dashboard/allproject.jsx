@@ -1,3 +1,5 @@
+//announcements
+
 import { View, Text } from "react-native";
 import React from "react";
 import Projectcard from "../../components/projectcard";
@@ -11,9 +13,9 @@ import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Allproject = () => {
+const Announcement = () => {
   const { authToken } = useGetData();
-  const router=useRouter();
+  const router = useRouter();
 
   const getDashboardResponse = useQuery({
     queryKey: ["dashboard"],
@@ -25,14 +27,19 @@ const Allproject = () => {
     return <Loading />;
   }
 
-  if(getDashboardResponse.isError){
-    if(getDashboardResponse.error.message=="401"){
-      Toast.show({type:"error",text1:"Session expired, please login again"})
+  if (getDashboardResponse.isError) {
+    if (getDashboardResponse.error.message == "401") {
+      Toast.show({
+        type: "error",
+        text1: "Session expired, please login again",
+      });
       AsyncStorage.removeItem("authToken");
       router.replace("/");
-    }
-    else{
-      Toast.show({type:"error",text1:"Something went wrong, please try again later"})
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong, please try again later",
+      });
     }
   }
 
@@ -54,4 +61,4 @@ const Allproject = () => {
   );
 };
 
-export default Allproject;
+export default Announcement;
