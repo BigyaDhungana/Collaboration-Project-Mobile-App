@@ -73,7 +73,7 @@ const Profile = ({ userDetails }) => {
 
           <AvatarImage
             source={{
-              uri: `${process.env.EXPO_PUBLIC_API_URL}/${userDetails.profile_picture}`,
+              uri: `http://134.209.145.74:8000/${userDetails.profile_picture}`,
             }}
             alt="profile_pic"
           />

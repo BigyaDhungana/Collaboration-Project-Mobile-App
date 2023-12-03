@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `${process.env.EXPO_PUBLIC_API_URL}/api/dashboard/`;
+const url = `http://134.209.145.74:8000/api/dashboard/`;
 
 export const dashboardApi = async (token) => {
   try {

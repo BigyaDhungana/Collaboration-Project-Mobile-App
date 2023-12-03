@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `${process.env.EXPO_PUBLIC_API_URL}/users/`;
+const url = `http://134.209.145.74:8000/users/`;
 
 export const loginApi = async (data) => {
   try {
