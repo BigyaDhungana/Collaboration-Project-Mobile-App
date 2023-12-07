@@ -14,7 +14,7 @@ import {
 import { config } from "../config/gluestack-ui.config";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import logo from "../assets/img/logoa.png";
+import logo from "../assets/img/logo.png";
 import { useRouter } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "../apiFunc/users";

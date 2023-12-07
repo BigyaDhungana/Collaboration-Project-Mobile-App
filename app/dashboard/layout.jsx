@@ -10,7 +10,7 @@ import {
 import React, { useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Projectdash from "./[projectId]";
-import logo from "../../assets/img/logos.png";
+import logo from "../../assets/img/tasksphere.png";
 import Profile from "../../components/profile";
 import Announcement from "./allproject";
 import { useGetData } from "../../hooks/useGetData";
