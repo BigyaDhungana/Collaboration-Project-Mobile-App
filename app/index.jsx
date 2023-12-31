@@ -14,7 +14,7 @@ import {
 import { config } from "../config/gluestack-ui.config";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import logo from "../assets/img/logo.png";
+import logo from "../assets/img/tasksphere.png";
 import { useRouter } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "../apiFunc/users";
@@ -77,7 +77,7 @@ export default function Page() {
     onError: (error) => {
       Toast.show({
         type: "error",
-        text1: error.message,
+        text1: "Invalid Credentials",
         text2: "Please try again",
       });
     },
@@ -127,7 +127,7 @@ export default function Page() {
         <Image source={logo} style={styles.logo} />
         <View style={styles.box}>
           <Center>
-            <Heading size="3xl">Welcome</Heading>
+            <Heading size="3xl">Login</Heading>
           </Center>
 
           <View style={styles.info}>
@@ -204,11 +204,11 @@ const styles = StyleSheet.create({
     height: 290,
   },
   logo: {
-    width: 200,
-    height: 200,
+    resizeMode: "contain",
+    width: "80%",
   },
   info: {
-    backgroundColor: "#FFF8DC",
+    // backgroundColor: "#FFF8DC",
     flex: 1,
   },
   infoItem: {
